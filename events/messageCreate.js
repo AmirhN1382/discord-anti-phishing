@@ -143,9 +143,16 @@ module.exports = {
                 if(msg.inGuild()){
                     if(msg.guild.me.permissions.has([Permissions.FLAGS.MANAGE_MEMBERS]) && msg.member.manageable)
                         msg.member.timeout(1440 * 60 * 1000, `AntiPhishing: ${response.reason}`);
-                    else
+                    else{
                         WarningEmbed.addField(`\u200B`, `\u200B`);
                         WarningEmbed.addField(`🚨 ATTENTION 🚨`, `**I don't have the permission to timeout FIX IT ASAP and Timeout/Ban This User Yourself!**`);
+                    }
+
+                    // Delete Message / Original Message hyperlink wont work anymore
+                    if(msg.guild.me.permissions.has([Permissions.FLAGS.MANAGE_MESSAGES]))
+                        msg.delete();
+                    else
+                        console.log(`I don't have the permission to delete the message!`);
                 }
                 else{
                     await msg.client.guilds.fetch(config.guildId)
@@ -154,9 +161,10 @@ module.exports = {
                                 .then(member => {
                                     if(member.guild.me.permissions.has([Permissions.FLAGS.MANAGE_MEMBERS]) && member.manageable)
                                         member.timeout(1440 * 60 * 1000, `AntiPhishing: ${response.reason}`);
-                                    else
+                                    else{
                                         WarningEmbed.addField(`\u200B`, `\u200B`);
                                         WarningEmbed.addField(`🚨 ATTENTION 🚨`, `**I don't have the permission to timeout FIX IT ASAP and Timeout/Ban This User Yourself!**`);
+                                    }
                                 })
                         })
                 }
